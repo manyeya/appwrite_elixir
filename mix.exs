@@ -6,8 +6,11 @@ defmodule AppwriteElixir.MixProject do
       app: :appwrite_elixir,
       version: "0.1.0",
       elixir: "~> 1.12",
+      description: "Appwrite Sdk for Elixir",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      package: package(),
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -16,7 +19,7 @@ defmodule AppwriteElixir.MixProject do
     [
       extra_applications: [:logger],
       mod: {AppwriteElixir.Application, []},
-      applications: [:httpoison,:jason]
+      applications: [:httpoison, :jason]
     ]
   end
 
@@ -25,6 +28,23 @@ defmodule AppwriteElixir.MixProject do
     [
       {:httpoison, "~> 1.7"},
       {:jason, "~> 1.2"}
+    ]
+  end
+
+  defp docs do
+    [
+      extras: ["README.md"]
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["manyeya"],
+      licenses: ["MIT"],
+      links: %{
+        "github" => "https://github.com/manyeya/appwrite_elixir",
+        "docs" => "http://hexdocs.pm/appwrite_elixir/"
+      }
     ]
   end
 end
