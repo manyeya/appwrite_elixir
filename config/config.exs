@@ -1,4 +1,7 @@
 use Mix.Config
 
 config :appwrite_elixir,
+  api_key:
+    "047602e293eb16d1713ff2abd0bc08761a960122d506f10a7bac553844332f9012a27b03daa43763918e5340d9fbba36f4d400e9fe514c4d9e8bdfa7cbe680a73050b5be3a82f4bed3837f16ca6ecf20acfd400fdd0ec63b579d9e77aecf90d9fa70e0b0e5f6917a0f99d2a2cbaf30b58087685fc46fb2b2abdd2462a4d7dab6",
+  project_id: "618e3bb38e238",
   host: "localhost"
