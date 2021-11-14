@@ -1,18 +1,14 @@
 defmodule AppwriteElixir.Services.Generics do
   alias Jason
 
-  @project_id Application.get_env(:appwrite_elixir, :project_id)
-  @api_key Application.get_env(:appwrite_elixir, :api_key)
+  @headers [
+    "X-Appwrite-Project": "#{Application.get_env(:appwrite_elixir, :project_id)}",
+    "X-Appwrite-Key": "#{Application.get_env(:appwrite_elixir, :api_key)}",
+    Accept: "Application/json; Charset=utf-8"
+  ]
 
   def get(url) do
-    
-    headers = [
-      "X-Appwrite-Project": "#{@project_id}",
-      "X-Appwrite-Key": "#{@api_key}",
-      Accept: "Application/json; Charset=utf-8"
-    ]
-
-    case HTTPoison.get(url, headers) do
+    case HTTPoison.get(url, @headers) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         body |> Jason.decode!()
 
