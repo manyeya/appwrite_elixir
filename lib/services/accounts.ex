@@ -13,10 +13,7 @@ defmodule AppwriteElixir.Services.Accounts do
 
   # @host Application.get_env(:appwrite_elixir, :host)
 
-
-
-
-
-  # def createOAuth2Session() do
-  # end
+  def createOAuth2Session() do
+    
+  end
 end
