@@ -6,7 +6,7 @@ defmodule AppwriteElixir.MixProject do
       app: :appwrite_elixir,
       version: "0.1.0",
       elixir: "~> 1.12",
-      description: "Appwrite Sdk for Elixir",
+      description: "Appwrite sdk for Elixir",
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
