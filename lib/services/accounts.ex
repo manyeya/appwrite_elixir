@@ -1,5 +1,6 @@
 defmodule AppwriteElixir.Services.Accounts do
   alias AppwriteElixir.Services.Generics
+  alias Jason
 
   @moduledoc """
   The Account service allows you to authenticate and manage a user account.
@@ -13,10 +14,10 @@ defmodule AppwriteElixir.Services.Accounts do
   @host Application.get_env(:appwrite_elixir, :host)
 
   def create_user() do
-    Generics.post("http://#{@host}/v1/account", %{
-      "email" => 'email@example.com',
-      "password" => 'password'
-    })
+    payload = Jason.encode!(%{email: "manyeya@gmail.com", password: "Kingkhuts0"})
+    Generics.post(
+      "http://#{@host}/v1/account",
+      payload
+    )
   end
-
 end

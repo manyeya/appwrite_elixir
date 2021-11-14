@@ -10,7 +10,6 @@ defmodule AppwriteElixir.Application do
       # Starts a worker by calling: AppwriteElixir.Worker.start_link(arg)
       # {AppwriteElixir.Worker, arg}
     ]
-
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: AppwriteElixir.Supervisor]

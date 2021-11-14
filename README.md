@@ -1,6 +1,6 @@
 # AppwriteElixir
 
-**TODO: Add description**
+Welcome to our documentation section. Here you will be able to find quick guides to setup and integrate with AppwriteElixir on your Elixir Project. You can also review full and detailed API references to all of our Appwrite's services.
 
 ## Installation
 
@@ -10,7 +10,7 @@ by adding `appwrite_elixir` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:appwrite_elixir, "~> 0.1.0"}
+    {:appwrite_elixir, "~> 0.1.1"}
   ]
 end
 ```

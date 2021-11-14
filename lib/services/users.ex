@@ -5,10 +5,20 @@ defmodule AppwriteElixir.Services.Users do
   The Users service allows you to manage your project users.
   Use this service to search, block, and view your users' info, current sessions, and latest activity logs.
   You can also use the Users service to edit your users' preferences and personal info.
+  
   """
 
   @host Application.get_env(:appwrite_elixir, :host)
-
+  @typedoc """
+  $id: User ID.\n
+  name:	User name.\n
+  registration: User registration date in Unix timestamp.\n
+  status: User status. 0 for Unactivated, 1 for active and 2 is blocked.\n
+  passwordUpdate: Unix timestamp of the most recent password update\n
+  email: User email address.\n
+  emailVerification: Email verification status.\n
+  prefs: User preferences as a key-value object\n
+  """
   @type user_object :: %{
           id: String.t(),
           name: String.t(),
@@ -74,11 +84,12 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Get a list of all the project's users. You can use the query params to filter your results.
   """
+  ## dont foege to impletment query: %{page: 2}
   @spec get_all_users() :: List[user_object]
   def get_all_users() do
     Generics.get("http://#{@host}/v1/users")
   end
-  
+
   @doc """
   Get a user by its unique ID.
   """
