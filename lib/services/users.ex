@@ -5,7 +5,6 @@ defmodule AppwriteElixir.Services.Users do
   The Users service allows you to manage your project users.
   Use this service to search, block, and view your users' info, current sessions, and latest activity logs.
   You can also use the Users service to edit your users' preferences and personal info.
-
   """
 
   @host Application.get_env(:appwrite_elixir, :host)
@@ -82,40 +81,17 @@ defmodule AppwriteElixir.Services.Users do
           current: boolean()
         }
 
-  defmodule UserInput do
-    @type t :: %{
-            email: String.t(),
-            password: String.t(),
-            name: String.t()
-          }
-    defstruct email: "", password: "", name: ""
-  end
-
   @spec create_user(email: String.t(), password: String.t(), name: String.t()) :: user_object
-  def create_user(email, password, name) do
+  def create_user(email, password, name \\ "") do
     payload =
-      Jason.encode!(%UserInput{
+      Jason.encode!(%{
         email: email,
         password: password,
         name: name
       })
 
     Generics.post(
-      "http://#{@host}/v1/account",
-      payload
-    )
-  end
-
-  @spec create_user(email: String.t(), password: String.t()) :: user_object
-  def create_user(email, password) do
-    payload =
-      Jason.encode!(%UserInput{
-        email: email,
-        password: password
-      })
-
-    Generics.post(
-      "http://#{@host}/v1/account",
+      "http://#{@host}/v1/users",
       payload
     )
   end
