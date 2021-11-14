@@ -1,5 +1,5 @@
 defmodule AppwriteElixir.Services.Accounts do
-  alias AppwriteElixir.Services.Generics
+  alias AppwriteElixir.Generics
   alias Jason
 
   @moduledoc """

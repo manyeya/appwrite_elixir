@@ -1,4 +1,7 @@
-defmodule AppwriteElixir.Services.Generics do
+defmodule AppwriteElixir.Generics do
+  @moduledoc """
+  Generic methods to interact with Appwrite's Rest API.
+  """
   alias Jason
 
   @headers [
