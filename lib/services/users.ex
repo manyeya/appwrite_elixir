@@ -9,6 +9,7 @@ defmodule AppwriteElixir.Services.Users do
   """
 
   @host Application.get_env(:appwrite_elixir, :host)
+
   @typedoc """
   $id: User ID.\n
   name:	User name.\n
@@ -80,6 +81,44 @@ defmodule AppwriteElixir.Services.Users do
           countryName: String.t(),
           current: boolean()
         }
+
+  defmodule UserInput do
+    @type t :: %{
+            email: String.t(),
+            password: String.t(),
+            name: String.t()
+          }
+    defstruct email: "", password: "", name: ""
+  end
+
+  @spec create_user(email: String.t(), password: String.t(), name: String.t()) :: user_object
+  def create_user(email, password, name) do
+    payload =
+      Jason.encode!(%UserInput{
+        email: email,
+        password: password,
+        name: name
+      })
+
+    Generics.post(
+      "http://#{@host}/v1/account",
+      payload
+    )
+  end
+
+  @spec create_user(email: String.t(), password: String.t()) :: user_object
+  def create_user(email, password) do
+    payload =
+      Jason.encode!(%UserInput{
+        email: email,
+        password: password
+      })
+
+    Generics.post(
+      "http://#{@host}/v1/account",
+      payload
+    )
+  end
 
   @doc """
   Get a list of all the project's users. You can use the query params to filter your results.

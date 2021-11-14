@@ -1,5 +1,5 @@
 defmodule AppwriteElixir.Services.Accounts do
-  alias AppwriteElixir.Generics
+  # alias AppwriteElixir.Generics
   alias Jason
 
   @moduledoc """
@@ -11,13 +11,12 @@ defmodule AppwriteElixir.Services.Accounts do
   Once the user is authenticated, a new session object will be created to allow the user to access his or her private data and settings.
   """
 
-  @host Application.get_env(:appwrite_elixir, :host)
+  # @host Application.get_env(:appwrite_elixir, :host)
 
-  def create_user() do
-    payload = Jason.encode!(%{email: "manyeya@gmail.com", password: "Kingkhuts0"})
-    Generics.post(
-      "http://#{@host}/v1/account",
-      payload
-    )
-  end
+
+
+
+
+  # def createOAuth2Session() do
+  # end
 end
