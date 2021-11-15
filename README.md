@@ -10,7 +10,7 @@ by adding `appwrite_elixir` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:appwrite_elixir, "~> 0.1.1"}
+    {:appwrite_elixir, "~> 0.1.3"}
   ]
 end
 ```
@@ -25,6 +25,4 @@ config :appwrite_elixr,
     :host "YOUR_HOST" # defaults to localhost
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/appwrite_elixir](https://hexdocs.pm/appwrite_elixir).
+The docs can be found at [https://hexdocs.pm/appwrite_elixir](https://hexdocs.pm/appwrite_elixir).

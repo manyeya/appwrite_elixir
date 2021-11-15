@@ -6,6 +6,7 @@ defmodule AppwriteElixir.Services.Users do
   Use this service to search, block, and view your users' info, current sessions, and latest activity logs.
   You can also use the Users service to edit your users' preferences and personal info.
   """
+
   @host Application.get_env(:appwrite_elixir, :host)
 
   @typedoc """
@@ -29,6 +30,50 @@ defmodule AppwriteElixir.Services.Users do
           prefs: %{}
         }
 
+  @typedoc """
+
+  $id: Session ID.
+
+  userId: User ID.
+
+  expire: Session expiration date in Unix timestamp.
+
+  provider: Session Provider.
+
+  providerUid: Session Provider User ID.
+
+  providerToken: Session Provider Token.
+
+  ip: IP session in use when the session was created.
+
+  osCode: Operating system code name. View list of available options.
+
+  osName: Operating system name.
+
+  osVersion: Operating system version.
+
+  clientType: Client type.
+
+  clientCode: Client code name.
+
+  clientName: Client name.
+
+  clientVersion: Client version.
+
+  clientEngine: Client engine name.
+
+  clientEngineVersion: Client engine name.
+
+  deviceName: Device name.
+
+  deviceBrand: Device brand name.
+
+  deviceModel: Device model name.
+
+  countryCode: Country two-character ISO 3166-1 alpha code.
+
+  countryName: Country name.
+  """
   @type session_object :: %{
           id: String.t(),
           userId: String.t(),
@@ -54,11 +99,51 @@ defmodule AppwriteElixir.Services.Users do
           current: boolean()
         }
 
+  @typedoc """
+  sum: total number of sessions
+  sessions: list of sessions
+  """
   @type session_list_object :: %{
           sum: integer(),
           sessions: List[session_object]
         }
 
+  @typedoc """
+
+  event: Event name.
+
+  ip: IP session in use when the session was created.
+
+  time: Log creation time in Unix timestamp.
+
+  osCode: Operating system code name. View list of available options.
+
+  osName: Operating system name.
+
+  osVersion: Operating system version.
+
+  clientType: Client type.
+
+  clientCode: Client code name.
+
+  clientName: Client name.
+
+  clientVersion: Client version.
+
+  clientEngine: Client engine name.
+
+  clientEngineVersion: Client engine name.
+
+  deviceName: Device name.
+
+  deviceBrand: Device brand name.
+
+  deviceModel: Device model name.
+
+  countryCode: Country two-character ISO 3166-1 alpha code.
+
+  countryName: Country name.
+  """
   @type log :: %{
           event: String.t(),
           ip: String.t(),
@@ -83,8 +168,8 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Create a new user.
   """
-  # @spec create_new_user(email: String.t(), name: String.t(), password: String.t()) :: user_object | {:error, term()}
-  def create_user(email, name \\ "", password) do
+  @spec create_user(String.t(), String.t(), String.t()) :: user_object | {:error, term()}
+  def create_user(email, password, name \\ "") do
     payload =
       Jason.encode!(%{
         email: email,
@@ -118,7 +203,7 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Get the user preferences by its unique ID.
   """
-  @spec get_user_prefs(id: String.t()) :: %{} | {:error, term()}
+  @spec get_user_prefs(String.t()) :: %{} | {:error, term()}
   def get_user_prefs(user_id) do
     Generics.get("http://#{@host}/v1/users/#{user_id}")
   end
@@ -126,7 +211,7 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Get the user sessions list by its unique ID.
   """
-  @spec get_user_sessions(id: String.t()) :: session_list_object | {:error, term()}
+  @spec get_user_sessions(String.t()) :: session_list_object | {:error, term()}
   def get_user_sessions(user_id) do
     Generics.get("http://#{@host}/v1/users/#{user_id}/sessions")
   end
@@ -134,7 +219,7 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Get a user activity logs list by its unique ID.
   """
-  @spec get_user_logs(id: String.t()) :: List[log] | {:error, term()}
+  @spec get_user_logs(String.t()) :: List[log] | {:error, term()}
   def get_user_logs(user_id) do
     Generics.get("http://#{@host}/v1/users/#{user_id}/logs")
   end
@@ -142,20 +227,15 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Update the user status by its unique ID.
   """
-  defmodule UpdateUserStatusInputs do
-    defstruct user_id: "", status: false
-    @type t :: %__MODULE__{user_id: String.t(), status: boolean()}
-  end
-
-  @spec update_user_status(UpdateUserStatusInputs) :: user_object | {:error, term()}
-  def update_user_status(input) do
+  @spec update_user_status(String.t(), boolean()) :: user_object | {:error, term()}
+  def update_user_status(user_id, status) do
     payload =
       Jason.encode!(%{
-        status: input.status
+        status: status
       })
 
     Generics.patch(
-      "http://#{@host}/v1/users/#{input.user_id}/status",
+      "http://#{@host}/v1/users/#{user_id}/status",
       payload
     )
   end
@@ -163,21 +243,16 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Update the user email verification status by its unique ID.
   """
-  defmodule UpdateEmailVerificationInputs do
-    defstruct user_id: "", status: false
-    @type t :: %UpdateEmailVerificationInputs{user_id: String.t(), status: boolean()}
-  end
-
-  @spec update_user_email_verification(UpdateEmailVerificationInputs.t()) ::
+  @spec update_user_email_verification(String.t(), boolean()) ::
           user_object | {:error, term()}
-  def update_user_email_verification(input) do
+  def update_user_email_verification(user_id, status) do
     payload =
       Jason.encode!(%{
-        emailVerification: input.status
+        emailVerification: status
       })
 
     Generics.patch(
-      "http://#{@host}/v1/users/#{input.user_id}/verification",
+      "http://#{@host}/v1/users/#{user_id}/verification",
       payload
     )
   end
@@ -185,20 +260,15 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Update the user name by its unique ID.
   """
-  defmodule UpdateUserNameInputs do
-    defstruct user_id: "", name: ""
-    @type t :: %UpdateUserNameInputs{user_id: String.t(), name: String.t()}
-  end
-
-  @spec update_user_name(UpdateUserNameInputs.t()) :: user_object | {:error, term()}
-  def update_user_name(input) do
+  @spec update_user_name(String.t(), String.t()) :: user_object | {:error, term()}
+  def update_user_name(user_id, name) do
     payload =
       Jason.encode!(%{
-        name: input.name
+        name: name
       })
 
     Generics.patch(
-      "http://#{@host}/v1/users/#{input.user_id}/name",
+      "http://#{@host}/v1/users/#{user_id}/name",
       payload
     )
   end
@@ -206,38 +276,31 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Update the user password by its unique ID.
   """
-  defmodule UpdateUserPasswordInputs do
-    defstruct user_id: "", password: ""
-    @type t :: %UpdateUserPasswordInputs{user_id: String.t(), password: String.t()}
-  end
-
-  @spec update_user_password(UpdateUserPasswordInputs.t()) :: user_object | {:error, term()}
-  def update_user_password(input) do
+  @spec update_user_password(String.t(), String.t()) :: user_object | {:error, term()}
+  def update_user_password(user_id, password) do
     payload =
       Jason.encode!(%{
-        password: input.password
+        password: password
       })
 
     Generics.patch(
-      "http://#{@host}/v1/users/#{input.user_id}/password",
+      "http://#{@host}/v1/users/#{user_id}/password",
       payload
     )
   end
 
-  defmodule UpdateUserEmailInputs do
-    defstruct user_id: "", email: ""
-    @type t :: %UpdateUserEmailInputs{user_id: String.t(), email: String.t()}
-  end
-
-  @spec update_user_email(UpdateUserEmailInputs.t()) :: user_object | {:error, term()}
-  def update_user_email(input) do
+  @doc """
+  Update the user email by its unique ID.
+  """
+  @spec update_user_email(String.t(), String.t()) :: user_object | {:error, term()}
+  def update_user_email(user_id, email) do
     payload =
       Jason.encode!(%{
-        password: input.email
+        email: email
       })
 
     Generics.patch(
-      "http://#{@host}/v1/users/#{input.user_id}/email",
+      "http://#{@host}/v1/users/#{user_id}/email",
       payload
     )
   end
@@ -245,20 +308,15 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Update the user preferences by its unique ID. You can pass only the specific settings you wish to update.
   """
-  defmodule UpdateUserPrefsInputs do
-    defstruct user_id: "", prefs: %{}
-    @type t :: %UpdateUserPrefsInputs{user_id: String.t(), prefs: %{}}
-  end
-
-  @spec update_user_prefs(UpdateUserPrefsInputs.t()) :: user_object | {:error, term()}
-  def update_user_prefs(input) do
+  @spec update_user_prefs(String.t(), %{}) :: user_object | {:error, term()}
+  def update_user_prefs(user_id, prefs) do
     payload =
       Jason.encode!(%{
-        prefs: Jason.encode!(input.prefs)
+        prefs: Jason.encode!(prefs)
       })
 
     Generics.patch(
-      "http://#{@host}/v1/users/#{input.user_id}/prefs",
+      "http://#{@host}/v1/users/#{user_id}/prefs",
       payload
     )
   end
@@ -266,20 +324,15 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Delete a user sessions by its unique ID.
   """
-  defmodule DeleteUserSessionInputs do
-    defstruct user_id: "", session_id: ""
-    @type t :: %DeleteUserSessionInputs{user_id: String.t(), session_id: String.t()}
-  end
-
-  @spec delete_user_session(DeleteUserSessionInputs.t()) :: nil | {:error, term()}
-  def delete_user_session(input) do
-    Generics.delete("http://#{@host}/v1/users/#{input.user_id}/sessions/#{input.session_id}")
+  @spec delete_user_session(String.t(), String.t()) :: %{} | {:error, term()}
+  def delete_user_session(user_id, session_id) do
+    Generics.delete("http://#{@host}/v1/users/#{user_id}/sessions/#{session_id}")
   end
 
   @doc """
   Delete all user's sessions by using the user's unique ID.
   """
-  @spec delete_user_sessions(id: String.t()) :: nil | {:error, term()}
+  @spec delete_user_sessions(String.t()) :: nil | {:error, term()}
   def delete_user_sessions(user_id) do
     Generics.delete("http://#{@host}/v1/users/#{user_id}/sessions")
   end
@@ -287,7 +340,7 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Delete a user by its unique ID.
   """
-  @spec delete_user(id: String.t()) :: nil | :error, term()
+  @spec(delete_user(String.t()) :: nil | :error, term())
   def delete_user(user_id) do
     Generics.delete("http://#{@host}/v1/users/#{user_id}")
   end
