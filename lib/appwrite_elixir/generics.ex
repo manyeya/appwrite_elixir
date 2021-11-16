@@ -47,6 +47,19 @@ defmodule AppwriteElixir.Generics do
     end
   end
 
+  def put(url, payload) do
+    case HTTPoison.put(url, payload, @headers) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        body |> Jason.decode!()
+
+      {:ok, %HTTPoison.Response{status_code: 401}} ->
+        IO.puts("Access Denied")
+
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        IO.inspect(reason)
+    end
+  end
+
   def delete(url) do
     case HTTPoison.delete(url, @headers) do
       {:ok, %HTTPoison.Response{status_code: 204}} ->

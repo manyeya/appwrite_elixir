@@ -101,6 +101,7 @@ defmodule AppwriteElixir.Services.Users do
 
   @typedoc """
   sum: total number of sessions
+
   sessions: list of sessions
   """
   @type session_list_object :: %{
@@ -186,16 +187,18 @@ defmodule AppwriteElixir.Services.Users do
   @doc """
   Get a list of all the project's users. You can use the query params to filter your results.
   """
-  # dont foege to impletment query: %{page: 2}
-  @spec get_all_users() :: List[user_object] | {:error, term()}
-  def get_all_users() do
-    Generics.get("http://#{@host}/v1/users")
+  @spec get_all_users(String.t(), integer(), integer(), String.t()) ::
+          List[user_object] | {:error, term()}
+  def get_all_users(search \\ "", limit \\ 25, offset \\ 0, orderType \\ "ASC") do
+    Generics.get(
+      "http://#{@host}/v1/users?search=#{search}&limit=#{limit}&offset=#{offset}&orderType=#{orderType}"
+    )
   end
 
   @doc """
   Get a user by its unique ID.
   """
-  @spec get_one_user(id: String.t()) :: user_object | {:error, term()}
+  @spec get_one_user(String.t()) :: user_object | {:error, term()}
   def get_one_user(user_id) do
     Generics.get("http://#{@host}/v1/users/#{user_id}")
   end
@@ -233,7 +236,6 @@ defmodule AppwriteElixir.Services.Users do
       Jason.encode!(%{
         status: status
       })
-
     Generics.patch(
       "http://#{@host}/v1/users/#{user_id}/status",
       payload
